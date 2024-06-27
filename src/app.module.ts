@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AppController, GoogleController } from './app.controller';
-import { AppService, GoogleService } from './app.service';
-import { GoogleStrategy } from './google.strategy';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { join } from 'path';
+import { User } from './user/entities/user.entity';
 
 @Module({
   imports: [
@@ -20,7 +19,7 @@ import { join } from 'path';
         username: configService.get('DB_USER'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [ join(__dirname + '/../**/*.entity{.ts,.js}')],
+        entities: [User],
         synchronize: true,
       }),
       inject: [ConfigService]
@@ -28,7 +27,7 @@ import { join } from 'path';
     AuthModule,
     UserModule,
   ],
-  controllers: [AppController, GoogleController],
-  providers: [AppService, GoogleService, GoogleStrategy],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
