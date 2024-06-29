@@ -23,19 +23,42 @@ export class UserService {
       email: createUserDto.email,
       firstName: createUserDto.firstName,
       lastName: createUserDto.lastName,
-      password: await argon2.hash(createUserDto.password),
-      createdAt: createUserDto.createdAt,
-      isActive: createUserDto.isActive,
     });
-    return { user };
+
+    return user;
   }
 
   findAll() {
     return `This action returns all user`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOneByEmail(email) {
+    const user = await this.userRepository.findOne({where: {
+      email
+    }});
+
+    if (!user) {
+      return null;
+    }
+    return user;
+  }
+
+  async findByProviderid(providerId) {
+    return await this.userRepository.findOne ({
+      where: { provider: 'google', providerId: providerId},
+    });
+  }
+
+  async findOneById(id: number) {
+    return await this.userRepository.findOne({where: {
+      id,
+    }});
+  }
+
+  async findOne(email: string) {
+    return await this.userRepository.findOne({where : {
+      email,
+    }});
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

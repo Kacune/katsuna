@@ -1,10 +1,17 @@
 import { MinLength } from "class-validator";
+import { Provider } from "src/common/types/user";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
+
+    @Column({ nullable: false })
+    provider: Provider;
+
+    @Column({ nullable: false })
+    providerId: string;
     
     @Column({length: 30})
     firstName: string
@@ -15,16 +22,12 @@ export class User {
     @Column()
     email: string
 
-    @Column()
-    @MinLength(7)
-    password: string
-
     @CreateDateColumn()
     createdAt: Date
 
     @UpdateDateColumn()
     updatedAt: Date
 
-    @Column()
+    @Column({default: true})
     isActive: Boolean
 }
